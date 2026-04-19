@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vault GyzTREX v1.3 - 12 Case Files</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔓</text></svg>">
+</head>
+<body class="scanline">
+    <div id="loading" class="fixed inset-0 bg-black z-50 flex items-center justify-center">
+        <div class="text-center">
+            <p class="glow text-xl mb-4">> INITIALIZING GyzTREX SYSTEM...</p>
+            <p class="text-sm" id="loadingText">> Loading modules...</p>
+        </div>
+    </div>
+
+    <div id="app" class="max-w-3xl mx-auto p-4 opacity-0">
+        <div class="border-2 border-green-500 p-4 mb-4 bg-black/80">
+            <h1 class="text-2xl font-bold text-center glow">CASE FILES: VAULT GyzTREX v1.3</h1>
+            <p class="text-center text-sm text-green-300">12 Case untuk membuka 1 Vault | SIMULASI EDUKASI</p>
+        </div>
+
+        <div id="gameArea" class="border border-green-700 p-4 bg-black/80"></div>
+
+        <div class="text-xs text-center mt-4 text-green-700">
+            SIMULASI EDUKASI. TIDAK ADA HACKING ASLI. By GyzTREX_ID
+        </div>
+    </div>
+
+    <div id="modalCatatan" class="hidden fixed inset-0 bg-black/90 flex items-center justify-center p-4 z-50">
+        <div class="bg-black border-2 border-green-500 p-4 w-full max-w-md">
+            <h3 class="text-lg font-bold mb-2 glow">KATA KUNCI TERKUMPUL</h3>
+            <table class="w-full text-sm" id="tabelCatatan"></table>
+            <button onclick="tutupCatatan()" class="mt-4 w-full bg-green-900 py-2 hover:bg-green-800">TUTUP</button>
+        </div>
+    </div>
+
+    <audio id="sfxBeep" src="data:audio/wav;base64,UklGRi4AAAABXQVEVkZzAAAAAQAAAgAJAADQEAABAAAAAAAAAAAA" preload="auto"></audio>
+    <audio id="sfxError" src="data:audio/wav;base64,UklGRiQAAAABXQVEVkZzAAAAAQAAAgAJAADQEAABAAAAAAAAAAAA" preload="auto"></audio>
+    <audio id="sfxSuccess" src="data:audio/wav;base64,UklGRi4AAAABXQVEVkZzAAAAAQAAAgAJAADQEAABAAAAAAAAAAAA" preload="auto"></audio>
+
+    <script src="script.js"></script>
+</body>
+                                                                                                    </html>
