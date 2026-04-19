@@ -1,0 +1,233 @@
+const CASES = [
+    { 
+        lvl: 1, 
+        judul: "PARADOKS", 
+        kata: "PARADOKS", 
+        jawaban: "pembohong", 
+        html: `<p>Sebuah pernyataan: "Semua orang di pulau ini pembohong."</p><p>Jika yang ngomong adalah penduduk pulau itu sendiri, apa pekerjaannya?</p><p class="text-yellow-400">Clue: Ini paradoks Epimenides. Jawab 1 kata.</p>` 
+    },
+    { 
+        lvl: 2, 
+        judul: "STEGANO", 
+        kata: "INVERT", 
+        jawaban: "invert", 
+        html: `<p>Ada pesan tersembunyi di teks ini. Baca huruf kapitalnya aja:</p><p class="text-sm bg-black p-2">jangan pErcaya paDa apa yAng kaMu lihAt. Niat jaHat tersembunYi dibalik kaTa. VolTase tInggi.</p><p class="text-yellow-400">Clue: Ambil huruf kapital, gabungin jadi 1 kata bahasa Inggris.</p>` 
+    },
+    { 
+        lvl: 3, 
+        judul: "VIGENERE", 
+        kata: "CIPHER", 
+        jawaban: "cipher", 
+        html: `<p>Decode Vigenere Cipher:</p><div class="bg-black p-2 my-2">Text: KEVLXK<br>Key: BLACK</div><p class="text-yellow-400">Clue: Hasilnya 6 huruf bahasa Inggris. Artinya "sandi".</p><p class="text-xs text-green-700">Tips: Pake dcode.fr/vigenere-cipher</p>` 
+    },
+    { 
+        lvl: 4, 
+        judul: "KRIPTOGRAFI", 
+        kata: "NONAGON", 
+        jawaban: "nonagon", 
+        html: `<p>Rot13 dari ROT47 dari ini = jawaban:</p><div class="bg-black p-2 my-2">?@?8p@?</div><p class="text-yellow-400">Clue: 1. ROT47 dulu 2. Hasilnya di-ROT13. Jawabannya nama bangun datar sisi 9.</p>` 
+    },
+    { 
+        lvl: 5, 
+        judul: "LOGIKA", 
+        kata: "TAHUN", 
+        jawaban: "tahun", 
+        html: `<p>3 orang: A, B, C. A bilang "B pembohong". B bilang "C pembohong". C bilang "A & B pembohong".</p><p>Siapa yang jujur jika hanya 1 orang yang jujur?</p><p class="text-yellow-400">Clue: Jawabannya bukan nama orang, tapi "satuan waktu" dari umur mereka semua dijumlah.</p>` 
+    },
+    { 
+        lvl: 6, 
+        judul: "BINARY+HEX", 
+        kata: "BYTE", 
+        jawaban: "byte", 
+        html: `<p>01000010 01111001 01110100 01100101</p><p>Convert biner ke ASCII, lalu ambil 4 huruf pertamanya.</p><p class="text-yellow-400">Clue: Hasilnya 4 huruf, satuan data digital.</p>` 
+    },
+    { 
+        lvl: 7, 
+        judul: "RIDDLEx3", 
+        kata: "WAKTU", 
+        jawaban: "waktu", 
+        html: `<p class="italic">"Aku berjalan tanpa kaki. Aku punya mulut tapi tak bisa bicara. Aku punya ranjang tapi tak pernah tidur. Siapakah aku?"</p><p class="text-yellow-400">Clue: Jawabannya 5 huruf. Sesuatu yang dikejar hacker pas CTF.</p>` 
+    },
+    { 
+        lvl: 8, 
+        judul: "KOORDINAT", 
+        kata: "JAKARTA", 
+        jawaban: "jakarta", 
+        html: `<p>6°12' S 106°49' E</p><p>Itu koordinat kota apa?</p><p class="text-yellow-400">Clue: Ibukota negara +62. Jawab tanpa spasi.</p>` 
+    },
+    { 
+        lvl: 9, 
+        judul: "ANAGRAM", 
+        kata: "TERMINAL", 
+        jawaban: "terminal", 
+        html: `<p>Anagram: ALERT NIM</p><p>Susun ulang jadi 1 kata bahasa Inggris 8 huruf.</p><p class="text-yellow-400">Clue: Tempat hacker ngetik command.</p>` 
+    },
+    { 
+        lvl: 10, 
+        judul: "MATRIX", 
+        kata: "NEO", 
+        jawaban: "neo", 
+        html: `<p>Di film Matrix, siapa "The One"?</p><p>Nama 3 huruf. Ikuti kelinci putih.</p><p class="text-yellow-400">Clue: Bukan Morpheus, bukan Trinity.</p>` 
+    },
+    { 
+        lvl: 11, 
+        judul: "FINAL BOSS", 
+        kata: "GYZTREX", 
+        jawaban: "gyztrax", 
+        html: `<p>Ketik nama pembuat vault ini, tapi ganti E jadi A.</p><p class="text-yellow-400">Clue: GYZTR?X. 7 huruf total.</p>` 
+    },
+];
+
+let data = JSON.parse(localStorage.getItem('vaultGyzV13Dewa')) || { nama: "", level: 1, kata: Array(11).fill(""), mulai: Date.now() };
+
+const sfxBeep = document.getElementById('sfxBeep');
+const sfxError = document.getElementById('sfxError');
+const sfxSuccess = document.getElementById('sfxSuccess');
+
+function playSfx(audio) { audio.currentTime = 0; audio.play().catch(e => {}); }
+function save() { localStorage.setItem('vaultGyzV13Dewa', JSON.stringify(data)); }
+
+// Loading screen
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        document.getElementById('loadingText').innerHTML = '> Bypassing Firewall...';
+        setTimeout(() => {
+            document.getElementById('loadingText').innerHTML = '> DEWA MODE ACTIVATED';
+            setTimeout(() => {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('app').style.opacity = '1';
+                render();
+            }, 500);
+        }, 800);
+    }, 800);
+});
+
+function render() {
+    const gameArea = document.getElementById('gameArea');
+    if (!data.nama) {
+        gameArea.innerHTML = `
+            <h2 class="text-lg mb-4 glow">> MASUKKAN IDENTITAS AGEN DEWA</h2>
+            <input id="inputNama" class="w-full mb-2" placeholder="Nama Agen...">
+            <button onclick="mulaiGame()" class="w-full py-2">MULAI MISI NERAKA</button>
+        `;
+        return;
+    }
+
+    if (data.level > 11) return renderVault();
+
+    const c = CASES[data.level - 1];
+    gameArea.innerHTML = `
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg glow">Case #${c.lvl}: ${c.judul}</h2>
+            <div class="text-sm text-red-500">DEWA: ${c.lvl}/11</div>
+        </div>
+        <div class="mb-4">${c.html}</div>
+        <div class="flex gap-2">
+            <input id="inputJawaban" class="flex-1" placeholder="Ketik jawaban...">
+            <button onclick="cekJawaban()" class="px-4">SUBMIT</button>
+        </div>
+        <div class="flex gap-2 mt-2">
+            <button onclick="bukaCatatan()" class="text-xs px-2 py-1">CATATAN</button>
+            <button onclick="hint()" class="text-xs px-2 py-1">HINT</button>
+        </div>
+        <div id="feedback" class="mt-2 text-sm"></div>
+    `;
+    document.getElementById('inputJawaban').focus();
+    document.getElementById('inputJawaban').addEventListener('keypress', e => { if(e.key === 'Enter') cekJawaban(); });
+}
+
+function renderVault() {
+    document.getElementById('gameArea').innerHTML = `
+        <h2 class="text-lg glow text-center mb-4">🔒 VAULT DEWA TERKUNCI 🔒</h2>
+        <p class="text-sm mb-4">Masukkan 11 kata DEWA yg kamu kumpulkan sesuai urutan, dipisah spasi:</p>
+        <input id="inputVault" class="w-full mb-2" placeholder="PARADOKS INVERT CIPHER ...">
+        <button onclick="bukaVault()" class="w-full py-2 mb-2">UNLOCK VAULT</button>
+        <button onclick="bukaCatatan()" class="w-full py-1 text-sm">LIHAT CATATAN</button>
+        <div id="feedback" class="mt-2 text-sm"></div>
+    `;
+}
+
+function mulaiGame() {
+    playSfx(sfxBeep);
+    data.nama = document.getElementById('inputNama').value || "Anonim";
+    data.mulai = Date.now();
+    save(); render();
+}
+
+function cekJawaban() {
+    const input = document.getElementById('inputJawaban').value.trim().toLowerCase();
+    const feedback = document.getElementById('feedback');
+    const c = CASES[data.level - 1];
+
+    if (input === c.jawaban) {
+        playSfx(sfxSuccess);
+        data.kata[c.lvl - 1] = c.kata;
+        data.level++;
+        save();
+        feedback.innerHTML = `<span class="text-green-400">[CASE CLOSED] Kata kunci #${c.lvl}: ${c.kata}</span>`;
+        setTimeout(render, 1500);
+    } else {
+        playSfx(sfxError);
+        feedback.innerHTML = `<span class="text-red-400">[!] SALAH. Otak lu belum level dewa.</span>`;
+        navigator.vibrate && navigator.vibrate(100);
+    }
+}
+
+function bukaVault() {
+    const input = document.getElementById('inputVault').value.trim().toUpperCase();
+    const kunciAsli = CASES.map(c => c.kata).join(' ');
+    const feedback = document.getElementById('feedback');
+    
+    if (input === kunciAsli) {
+        playSfx(sfxSuccess);
+        const durasi = Math.floor((Date.now() - data.mulai) / 1000);
+        confetti({ particleCount: 300, spread: 160, origin: { y: 0.6 }, colors: ['#00ff41', '#ff0000'] });
+        document.getElementById('gameArea').innerHTML = `
+            <div class="text-center">
+                <pre class="text-red-500 text-xs my-4 glow">
+   *DOOR BREACHED* 
+         ___________________
+        | _________________ |
+        | |               | |
+        | | 💀 TERBUKA    | |
+        | |_______________| |
+        |___________________|
+                </pre>
+                <h2 class="text-xl font-bold glow my-4">ANDA RESMI DEWA HACKER<br>SIMULASI VAULT GyzTREX v1.3 DEWA</h2>
+                <div class="border border-red-500 p-4 text-left text-sm">
+                    <p>Nama Agen: ${data.nama}</p>
+                    <p>Password Dewa: ${kunciAsli}</p>
+                    <p>Waktu: ${Math.floor(durasi/60)} menit ${durasi%60} detik</p>
+                    <p>Status: DEWA WHITE HAT INVESTIGATOR</p>
+                </div>
+                <button onclick="shareWA()" class="w-full py-2 mt-4">PAMER KE WA</button>
+                <button onclick="resetGame()" class="w-full py-1 mt-2 text-sm">COBA LAGI?</button>
+            </div>
+        `;
+        localStorage.removeItem('vaultGyzV13Dewa');
+    } else {
+        playSfx(sfxError);
+        feedback.innerHTML = `<span class="text-red-400">[!!!] VAULT MELEDAK! Password salah! Skill issue.</span>`;
+        navigator.vibrate && navigator.vibrate([200,100,200]);
+    }
+}
+
+function bukaCatatan() {
+    playSfx(sfxBeep);
+    const tabel = document.getElementById('tabelCatatan');
+    tabel.innerHTML = '<tr><td class="pr-4 font-bold">Case</td><td class="font-bold">Kata</td></tr>';
+    data.kata.forEach((k, i) => {
+        tabel.innerHTML += `<tr><td>#${i+1}</td><td>${k || '<span class="text-red-500">???</span>'}</td></tr>`;
+    });
+    document.getElementById('modalCatatan').classList.remove('hidden');
+}
+function tutupCatatan() { document.getElementById('modalCatatan').classList.add('hidden'); }
+function hint() { 
+    playSfx(sfxBeep);
+    document.getElementById('feedback').innerHTML = `<span class="text-yellow-400">Hint Dewa: Google adalah temanmu. White Hat harus pinter research.</span>`; 
+}
+function shareWA() {
+    const text = `Gua tamat Vault GyzTREX MODE DEWA! 🗿💀🔓%0AStatus: DEWA WHITE HAT INVESTIGATOR%0ALu kuat berapa case?`;
+    window.open(`https://wa.me/?text=${text}`, '_blank');
+}
+function resetGame() { localStorage.removeItem('vaultGyzV13Dewa'); location.reload(); }
